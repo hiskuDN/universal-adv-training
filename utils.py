@@ -330,7 +330,7 @@ def transform(image, input_height, input_width, resize_height=64, resize_width=6
 
 
 def inverse_transform(images):
-    return ((images + 1.) / 2.).astype(np.uint8)
+    return ((images + 1.) / 2.)
 
 
 """ Drawing Tools """
