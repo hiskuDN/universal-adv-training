@@ -126,7 +126,7 @@ def load_svhn(source_class=None, trainonly=False):
 def load_celebA():
     print("[*] Loading CelebA")
 
-    data_dir = os.path.join("assets/data/atlas/u/ruishu/data")
+    data_dir = os.path.join("assets/data/celebA")
     X = sio.loadmat(data_dir + '/celeba64_zoom.mat')['images']
     y = sio.loadmat(data_dir + '/celeba_gender.mat')['y']
     y = np.eye(2)[y.reshape(-1)]
@@ -142,7 +142,7 @@ def load_celebA():
 def load_celebA4classifier():
     print("[*] Loading CelebA")
 
-    data_dir = os.path.join("assets/data/atlas/u/ruishu/data")
+    data_dir = os.path.join("assets/data/celebA")
     X = sio.loadmat(data_dir + '/celeba64_zoom.mat')['images']
     y = sio.loadmat(data_dir + '/celeba_gender.mat')['y']
     y = np.eye(2)[y.reshape(-1)]
