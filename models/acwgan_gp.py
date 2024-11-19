@@ -386,8 +386,8 @@ class ACWGAN_GP(object):
                     samples = self.sess.run(self.fake_images,
                                             feed_dict={self.z: self.sample_z, self.y: self.test_codes})
                     tot_num_samples = min(self.sample_num, self.batch_size)
-                    manifold_h = int(np.floor(np.sqrt(tot_num_samples)))
-                    manifold_w = int(np.floor(np.sqrt(tot_num_samples)))
+                    manifold_h = np.int8(np.floor(np.sqrt(tot_num_samples))).astype(np.uint8)
+                    manifold_w = np.int8(np.floor(np.sqrt(tot_num_samples))).astype(np.uint8)
                     save_images(samples[:manifold_h * manifold_w, :, :, :], [manifold_h, manifold_w],
                                 './' + check_folder(
                                     self.result_dir + '/' + self.model_dir) + '/' + self.model_name + '_train_{:02d}_{:04d}.png'.format(
