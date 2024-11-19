@@ -309,7 +309,7 @@ def merge(images, size):
 
 def imsave(images, size, path):
     image = np.squeeze(merge(images, size))
-    return imageio.imwrite(path, image)
+    return imageio.imwrite(path, image, imageio.astype(np.uint8))
 
 
 def center_crop(x, crop_h, crop_w, resize_h=64, resize_w=64):
