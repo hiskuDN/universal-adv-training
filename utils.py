@@ -45,7 +45,7 @@ def load_mnist(dataset_name, trainonly=False):
         with gzip.open(filename) as bytestream:
             bytestream.read(head_size)
             buf = bytestream.read(data_size * num_data)
-            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float)
+            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         return data
 
     data = extract_data(data_dir + '/train-images-idx3-ubyte.gz', 60000, 16, 28 * 28)
@@ -76,7 +76,7 @@ def load_mnist(dataset_name, trainonly=False):
     np.random.seed(seed)
     np.random.shuffle(y)
 
-    y_vec = np.zeros((len(y), 10), dtype=np.float)
+    y_vec = np.zeros((len(y), 10), dtype=np.float32)
     for i, label in enumerate(y):
         y_vec[i, y[i]] = 1.0
 
@@ -118,7 +118,7 @@ def load_svhn(source_class=None, trainonly=False):
     np.random.seed(seed)
     np.random.shuffle(y)
 
-    y_vec = np.zeros((len(y), 10), dtype=np.float)
+    y_vec = np.zeros((len(y), 10), dtype=np.float32)
     y_vec[np.arange(0, len(y)), y] = 1.0
     return X / 255., y_vec
 
@@ -174,10 +174,10 @@ def load_svhn4classifier():
     np.random.seed(seed)
     np.random.shuffle(trY)
 
-    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float)
+    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float32)
     tr_y_vec[np.arange(0, len(trY)), trY] = 1.0
 
-    te_y_vec = np.zeros((len(teY), 10), dtype=np.float)
+    te_y_vec = np.zeros((len(teY), 10), dtype=np.float32)
     te_y_vec[np.arange(0, len(teY)), teY] = 1.0
     return trX / 255., tr_y_vec, teX / 255., te_y_vec
 
@@ -189,7 +189,7 @@ def load_mnist4classifier(dataset_name):
         with gzip.open(filename) as bytestream:
             bytestream.read(head_size)
             buf = bytestream.read(data_size * num_data)
-            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float)
+            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         return data
 
     data = extract_data(data_dir + '/train-images-idx3-ubyte.gz', 60000, 16, 28 * 28)
@@ -213,9 +213,9 @@ def load_mnist4classifier(dataset_name):
     np.random.seed(seed)
     np.random.shuffle(trY)
 
-    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float)
+    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float32)
     tr_y_vec[np.arange(0, len(trY)), trY] = 1.0
-    te_y_vec = np.zeros((len(teY), 10), dtype=np.float)
+    te_y_vec = np.zeros((len(teY), 10), dtype=np.float32)
     te_y_vec[np.arange(0, len(teY)), teY] = 1.0
 
     return trX / 255., tr_y_vec, teX / 255., te_y_vec
@@ -277,9 +277,9 @@ def label_images(images, labels):
 
 def imread(path, grayscale=False):
     if (grayscale):
-        return scipy.misc.imread(path, flatten=True).astype(np.float)
+        return scipy.misc.imread(path, flatten=True).astype(np.float32)
     else:
-        return scipy.misc.imread(path).astype(np.float)
+        return scipy.misc.imread(path).astype(np.float32)
 
 
 def merge_images(images, size):
