@@ -309,6 +309,8 @@ def merge(images, size):
 
 def imsave(images, size, path):
     image = np.squeeze(merge(images, size))
+    if image.mode != 'RGB':
+        image = image.convert('RGB')
     return imageio.imwrite(path, image)
 
 
