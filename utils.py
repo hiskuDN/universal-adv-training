@@ -65,10 +65,10 @@ def load_mnist(dataset_name, trainonly=False):
 
     if trainonly:
         X = trX
-        y = trY.astype(np.int)
+        y = trY.astype(np.int32)
     else:
         X = np.concatenate((trX, teX), axis=0)
-        y = np.concatenate((trY, teY), axis=0).astype(np.int)
+        y = np.concatenate((trY, teY), axis=0).astype(np.int32)
 
     seed = 547
     np.random.seed(seed)
@@ -92,7 +92,7 @@ def load_svhn(source_class=None, trainonly=False):
         X = data['X'].transpose(3, 0, 1, 2)
         y = data['y'].reshape((-1))
         y[y == 10] = 0
-        return X, y.astype(np.int)
+        return X, y.astype(np.int32)
 
     trX, trY = extract_data('train_32x32.mat')
     teX, teY = extract_data('test_32x32.mat')
@@ -163,7 +163,7 @@ def load_svhn4classifier():
         X = data['X'].transpose(3, 0, 1, 2)
         y = data['y'].reshape((-1))
         y[y == 10] = 0
-        return X, y.astype(np.int)
+        return X, y.astype(np.int32)
 
     trX, trY = extract_data('train_32x32.mat')
     teX, teY = extract_data('test_32x32.mat')
@@ -204,8 +204,8 @@ def load_mnist4classifier(dataset_name):
     data = extract_data(data_dir + '/t10k-labels-idx1-ubyte.gz', 10000, 8, 1)
     teY = data.reshape((10000))
 
-    trY = np.asarray(trY).astype(np.int)
-    teY = np.asarray(teY).astype(np.int)
+    trY = np.asarray(trY).astype(np.int32)
+    teY = np.asarray(teY).astype(np.int32)
 
     seed = 547
     np.random.seed(seed)
