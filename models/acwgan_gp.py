@@ -156,7 +156,7 @@ class ACWGAN_GP(object):
         tf.disable_v2_behavior()
         with tf.variable_scope("discriminator", reuse=reuse):
             output = tf.reshape(x, [-1, self.output_height, self.output_width, self.c_dim])
-            if self.dataset_name in ('mnist', 'svhn', 'cifar10'):
+            if self.dataset_name in ('mnist', 'svhn'):
                 output = ResidualBlockDisc(output, self.dim_D, spectral_normed=False, update_collection=update_collection, name="d_residual_block")
                 output = ResidualBlock(output, None, self.dim_D, 3, resample='down', spectral_normed=False,
                                        update_collection=update_collection, name='d_res1')
@@ -180,7 +180,15 @@ class ACWGAN_GP(object):
                 output_logits = linear(output, 1, spectral_normed=False, update_collection=update_collection, name='d_output')
                 output_acgan = linear(output, self.y_dim, spectral_normed=False, update_collection=update_collection,
                                       name='d_acgan_output')
-
+            elif self.dataset_name == 'cifar10':
+                output = ResidualBlock(output, None, self.dim_D, 3, resample='down', name='d_res1')
+                output = ResidualBlock(output, None, self.dim_D, 3, resample='down', name='d_res2')
+                output = ResidualBlock(output, None, self.dim_D, 3, resample='down', name='d_res3')
+                output = tf.nn.relu(output)
+                output = tf.reduce_mean(output, axis=[1,2]) # global sum pooling
+                output_logits = linear(output, 1, spectral_normed=False, update_collection=update_collection, name='d_output')
+                output_acgan = linear(output, self.y_dim, spectral_normed=False, update_collection=update_collection,
+                                      name='d_acgan_output')
             else:
                 raise NotImplementedError("do not support dataset {}".format(self.dataset_name))
 
