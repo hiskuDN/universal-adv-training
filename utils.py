@@ -45,7 +45,7 @@ def load_mnist(dataset_name, trainonly=False):
         with gzip.open(filename) as bytestream:
             bytestream.read(head_size)
             buf = bytestream.read(data_size * num_data)
-            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float)
+            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         return data
 
     data = extract_data(data_dir + '/train-images-idx3-ubyte.gz', 60000, 16, 28 * 28)
@@ -65,10 +65,10 @@ def load_mnist(dataset_name, trainonly=False):
 
     if trainonly:
         X = trX
-        y = trY.astype(np.int)
+        y = trY.astype(np.uint8)
     else:
         X = np.concatenate((trX, teX), axis=0)
-        y = np.concatenate((trY, teY), axis=0).astype(np.int)
+        y = np.concatenate((trY, teY), axis=0).astype(np.uint8)
 
     seed = 547
     np.random.seed(seed)
@@ -76,7 +76,7 @@ def load_mnist(dataset_name, trainonly=False):
     np.random.seed(seed)
     np.random.shuffle(y)
 
-    y_vec = np.zeros((len(y), 10), dtype=np.float)
+    y_vec = np.zeros((len(y), 10), dtype=np.float32)
     for i, label in enumerate(y):
         y_vec[i, y[i]] = 1.0
 
@@ -92,7 +92,7 @@ def load_svhn(source_class=None, trainonly=False):
         X = data['X'].transpose(3, 0, 1, 2)
         y = data['y'].reshape((-1))
         y[y == 10] = 0
-        return X, y.astype(np.int)
+        return X, y.astype(np.uint8)
 
     trX, trY = extract_data('train_32x32.mat')
     teX, teY = extract_data('test_32x32.mat')
@@ -118,7 +118,7 @@ def load_svhn(source_class=None, trainonly=False):
     np.random.seed(seed)
     np.random.shuffle(y)
 
-    y_vec = np.zeros((len(y), 10), dtype=np.float)
+    y_vec = np.zeros((len(y), 10), dtype=np.float32)
     y_vec[np.arange(0, len(y)), y] = 1.0
     return X / 255., y_vec
 
@@ -126,7 +126,7 @@ def load_svhn(source_class=None, trainonly=False):
 def load_celebA():
     print("[*] Loading CelebA")
 
-    data_dir = os.path.join("assets/data/atlas/u/ruishu/data")
+    data_dir = os.path.join("assets/data/celebA")
     X = sio.loadmat(data_dir + '/celeba64_zoom.mat')['images']
     y = sio.loadmat(data_dir + '/celeba_gender.mat')['y']
     y = np.eye(2)[y.reshape(-1)]
@@ -142,7 +142,7 @@ def load_celebA():
 def load_celebA4classifier():
     print("[*] Loading CelebA")
 
-    data_dir = os.path.join("assets/data/atlas/u/ruishu/data")
+    data_dir = os.path.join("assets/data/celebA")
     X = sio.loadmat(data_dir + '/celeba64_zoom.mat')['images']
     y = sio.loadmat(data_dir + '/celeba_gender.mat')['y']
     y = np.eye(2)[y.reshape(-1)]
@@ -163,7 +163,7 @@ def load_svhn4classifier():
         X = data['X'].transpose(3, 0, 1, 2)
         y = data['y'].reshape((-1))
         y[y == 10] = 0
-        return X, y.astype(np.int)
+        return X, y.astype(np.uint8)
 
     trX, trY = extract_data('train_32x32.mat')
     teX, teY = extract_data('test_32x32.mat')
@@ -174,10 +174,10 @@ def load_svhn4classifier():
     np.random.seed(seed)
     np.random.shuffle(trY)
 
-    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float)
+    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float32)
     tr_y_vec[np.arange(0, len(trY)), trY] = 1.0
 
-    te_y_vec = np.zeros((len(teY), 10), dtype=np.float)
+    te_y_vec = np.zeros((len(teY), 10), dtype=np.float32)
     te_y_vec[np.arange(0, len(teY)), teY] = 1.0
     return trX / 255., tr_y_vec, teX / 255., te_y_vec
 
@@ -189,7 +189,7 @@ def load_mnist4classifier(dataset_name):
         with gzip.open(filename) as bytestream:
             bytestream.read(head_size)
             buf = bytestream.read(data_size * num_data)
-            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float)
+            data = np.frombuffer(buf, dtype=np.uint8).astype(np.float32)
         return data
 
     data = extract_data(data_dir + '/train-images-idx3-ubyte.gz', 60000, 16, 28 * 28)
@@ -204,8 +204,8 @@ def load_mnist4classifier(dataset_name):
     data = extract_data(data_dir + '/t10k-labels-idx1-ubyte.gz', 10000, 8, 1)
     teY = data.reshape((10000))
 
-    trY = np.asarray(trY).astype(np.int)
-    teY = np.asarray(teY).astype(np.int)
+    trY = np.asarray(trY).astype(np.uint8)
+    teY = np.asarray(teY).astype(np.uint8)
 
     seed = 547
     np.random.seed(seed)
@@ -213,9 +213,9 @@ def load_mnist4classifier(dataset_name):
     np.random.seed(seed)
     np.random.shuffle(trY)
 
-    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float)
+    tr_y_vec = np.zeros((len(trY), 10), dtype=np.float32)
     tr_y_vec[np.arange(0, len(trY)), trY] = 1.0
-    te_y_vec = np.zeros((len(teY), 10), dtype=np.float)
+    te_y_vec = np.zeros((len(teY), 10), dtype=np.float32)
     te_y_vec[np.arange(0, len(teY)), teY] = 1.0
 
     return trX / 255., tr_y_vec, teX / 255., te_y_vec
@@ -277,9 +277,9 @@ def label_images(images, labels):
 
 def imread(path, grayscale=False):
     if (grayscale):
-        return scipy.misc.imread(path, flatten=True).astype(np.float)
+        return scipy.misc.imread(path, flatten=True).astype(np.float32)
     else:
-        return scipy.misc.imread(path).astype(np.float)
+        return scipy.misc.imread(path).astype(np.float32)
 
 
 def merge_images(images, size):
@@ -308,7 +308,7 @@ def merge(images, size):
 
 
 def imsave(images, size, path):
-    image = np.squeeze(merge(images, size))
+    image = (np.squeeze(merge(images, size)) * 255).astype(np.uint8)
     return imageio.imwrite(path, image)
 
 
@@ -330,7 +330,7 @@ def transform(image, input_height, input_width, resize_height=64, resize_width=6
 
 
 def inverse_transform(images):
-    return (images + 1.) / 2.
+    return ((images + 1.) / 2.)
 
 
 """ Drawing Tools """

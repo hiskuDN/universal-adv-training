@@ -2,9 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 import os
-from tensorflow.examples.tutorials.mnist import input_data
-import tensorflow as tf
-tf.disable_v2_behavior()
+import tensorflow.compat.v1 as tf
+tf.compat.v1.disable_v2_behavior()
 import numpy as np
 
 class ZicoMNIST(object):
@@ -18,7 +17,7 @@ class ZicoMNIST(object):
         self.model_save_path = "./model"
         self.model_name = "model.ckpt"
 
-    def  train(self, mnist):
+    def  train(self, train_images, train_labels):
       with tf.variable_scope('net'):
         W0 = tf.get_variable('W0', dtype=tf.float32, shape=(4, 4, 1, 16))
         B0 = tf.get_variable('B0', dtype=tf.float32, shape=(16,))
@@ -56,7 +55,7 @@ class ZicoMNIST(object):
         learning_rate = tf.train.exponential_decay(
             self.learning_rate_base,
             global_step,
-            mnist.train.num_examples/self.batch_size,
+            len(train_images) / self.batch_size,
             self.learning_rate_decay)
         train_step = tf.train.GradientDescentOptimizer(learning_rate)\
                         .minimize(loss, global_step = global_step)
@@ -68,7 +67,9 @@ class ZicoMNIST(object):
             tf.initialize_all_variables().run()
 
             for i in range(self.traning_steps):
-                xs, ys = mnist.train.next_batch(self.batch_size)
+                batch_indices = np.random.choice(len(train_images), self.batch_size)
+                xs = train_images[batch_indices].reshape(self.batch_size, 28, 28, 1)
+                ys = train_labels[batch_indices]
                 _, loss_value, step  = sess.run([train_op, loss, global_step],
                                                 feed_dict={x: xs.reshape(100,28,28,1), y_: ys})
                 if i % 1000 ==0:
@@ -78,8 +79,8 @@ class ZicoMNIST(object):
                         sess, os.path.join(self.model_save_path,self.model_name),
                         global_step=global_step)
 def main(argv=None):
-    mnist = input_data.read_data_sets("./data/", one_hot=True)
+    (train_images, train_labels), _ = tf.keras.datasets.mnist.load_data()
     zico = ZicoMNIST()
-    zico.train(mnist)
+    zico.train(train_images, train_labels)
 if __name__  == '__main__':
     tf.app.run() 
