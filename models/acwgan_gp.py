@@ -156,7 +156,7 @@ class ACWGAN_GP(object):
         tf.disable_v2_behavior()
         with tf.variable_scope("discriminator", reuse=reuse):
             output = tf.reshape(x, [-1, self.output_height, self.output_width, self.c_dim])
-            if self.dataset_name in ('mnist', 'svhn'):
+            if self.dataset_name in ('mnist', 'svhn', 'cifar10'):
                 output = ResidualBlockDisc(output, self.dim_D, spectral_normed=False, update_collection=update_collection, name="d_residual_block")
                 output = ResidualBlock(output, None, self.dim_D, 3, resample='down', spectral_normed=False,
                                        update_collection=update_collection, name='d_res1')
@@ -223,6 +223,16 @@ class ACWGAN_GP(object):
                 output = gan_batch_norm(output, name='g_out')
                 output = tf.nn.relu(output)
                 output = conv2d(output, 3, 3, he_init=True, name='g_final')
+                output = tf.tanh(output)
+            elif self.dataset_name == 'cifar10':
+                output = linear(z, 4 * 4 * self.dim_G, name='g_fc1')
+                output = tf.reshape(output, [-1, 4, 4, self.dim_G])
+                output = ResidualBlock(output, y, self.dim_G, 3, resample='up', name='g_res1', n_labels=self.y_dim)
+                output = ResidualBlock(output, y, self.dim_G, 3, resample='up', name='g_res2', n_labels=self.y_dim)
+                output = ResidualBlock(output, y, self.dim_G, 3, resample='up', name='g_res3', n_labels=self.y_dim)
+                output = gan_batch_norm(output, name='g_out')
+                output = tf.nn.relu(output)
+                output = conv2d(output, 3, 3, he_init=False, name='g_final')
                 output = tf.tanh(output)
 
             return output
