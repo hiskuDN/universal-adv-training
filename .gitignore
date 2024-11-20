@@ -26,3 +26,6 @@ patched_images.npz
 model_2
 celebA_weights
 training_history
+
+*.zip
+*.npz
