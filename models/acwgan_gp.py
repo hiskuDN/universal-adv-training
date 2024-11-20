@@ -124,7 +124,7 @@ class ACWGAN_GP(object):
 
             self.z_dim = z_dim  # dimension of noise-vector
             self.y_dim = 10
-            self.c_dim = 1
+            self.c_dim = 3
 
             # WGAN_GP parameter
             self.lambd = 10 # The higher value, the more stable, but the slower convergence
