@@ -507,7 +507,7 @@ def defense_by_attack(hps, lambda1=100, lambda2=20, noise=False, test_num=0):
         elif args.dataset == 'svhn':
             net = tf.make_template('net', zico_svhn_template)
         elif args.dataset == 'celebA':
-            net = tf.make_template('net', zico_celebA_template)
+            net = tf.make_template('net', zico_celeba_template)
         elif args.dataset == 'cifar10':
             net = tf.make_template('net', zico_cifar10_template)
         else:
