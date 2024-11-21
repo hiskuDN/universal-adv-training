@@ -23,6 +23,7 @@ https://arxiv.org/pdf/1605.07146v1.pdf
 from collections import namedtuple
 
 import numpy as np
+import tensorflow as tf2
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 import six
@@ -127,7 +128,13 @@ class ResNet(object):
     def _batch_norm(self, name, x):
         """Batch normalization."""
         with tf.variable_scope(name, reuse=False):
-            return tf.contrib.layers.batch_norm(x, training=self.training, name="batch_norm")
+            bn = tf2.keras.layers.BatchNormalization(
+                momentum=0.997,
+                epsilon=1e-5,
+                fused=True,
+                name=name
+            )
+            return bn(x, training=self.training)
 
     def _residual(self, x, in_filter, out_filter, stride,
                   activate_before_residual=False):
