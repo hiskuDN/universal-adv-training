@@ -6,6 +6,7 @@ from models.madry_mnist import MadryModel
 from models.aditi_mnist import AditiMNIST
 from models.zico_mnist import ZicoMNIST
 from models.zico_svhn import ZicoSVHN
+from models.zico_celeba import ZicoCelebA
 from utils import *
 from adv_utils import *
 from models.vgg16 import vgg_16
@@ -98,7 +99,7 @@ def zico_template(images, training):
     return model.logits
 
 def zico_celeba_template(images, training):
-    model = ZicoMNIST(images)
+    model = ZicoCelebA(images)
     return model.logits
 
 def zico_cifar10_template(images, training):

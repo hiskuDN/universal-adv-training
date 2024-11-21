@@ -22,13 +22,14 @@ CUDA_VISIBLE_DEVICES=0 python main.py --mode defense_by_attack --dataset mnist -
 CUDA_VISIBLE_DEVICES=0 python main.py --mode defense_by_attack --dataset celebA --test_num 0
 ```
 
-* run the following before running defense by attack if you're using a docker container \
+* run the following before running defense by attack if you're using a docker container
 ```bash
 pip install opencv-python
 apt-get update -y
 apt-get install -y libgl1-mesa-glx
 pip install tf_slim
 pip install imageio
+pip install scipy
 ```
 
 Run `python main.py --help` to view more argument options. For hyperparameters such as `--noise`, `--lambda1`, `--lambda2`, `--eps`,  `--z_eps`, `--lr`, `--n_iters`, and `--test_num` (in that order)
