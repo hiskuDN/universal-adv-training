@@ -5,6 +5,7 @@ from cleverhans import fgm
 from models.madry_mnist import MadryModel
 from models.aditi_mnist import AditiMNIST
 from models.zico_mnist import ZicoMNIST
+from models.zico_svhn import ZicoSVHN
 from utils import *
 from adv_utils import *
 from models.vgg16 import vgg_16
@@ -96,6 +97,17 @@ def zico_template(images, training):
     model = ZicoMNIST(images)
     return model.logits
 
+def zico_celeba_template(images, training):
+    model = ZicoMNIST(images)
+    return model.logits
+
+def zico_cifar10_template(images, training):
+    model = ZicoMNIST(images)
+    return model.logits
+
+def zico_svhn_template(images, training):
+    model = ZicoSVHN(images)
+    return model.logits
 
 def evaluate(hps, data_X, data_y, eval_once=True):
     """Eval loop."""
@@ -489,7 +501,16 @@ def defense_by_attack(hps, lambda1=100, lambda2=20, noise=False, test_num=0):
     """defense by attack using ac-gans"""
 
     if args.classifier == 'zico':
-        net = tf.make_template('net', zico_template)
+        if args.dataset == 'mnist':
+            net = tf.make_template('net', zico_template)
+        elif args.dataset == 'svhn':
+            net = tf.make_template('net', zico_svhn_template)
+        elif args.dataset == 'celebA':
+            net = tf.make_template('net', zico_celebA_template)
+        elif args.dataset == 'cifar10':
+            net = tf.make_template('net', zico_cifar10_template)
+        else:
+            NotImplementedError("Dataset not supported for defense by attack")
     else:
         net = tf.make_template('net', resnet_template, hps=hps) if args.classifier == 'resnet' else \
             tf.make_template('net', vgg_template, hps=hps)
