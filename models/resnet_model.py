@@ -131,7 +131,6 @@ class ResNet(object):
             bn = tf2.keras.layers.BatchNormalization(
                 momentum=0.997,
                 epsilon=1e-5,
-                fused=True,
                 name=name
             )
             return bn(x, training=self.training)
