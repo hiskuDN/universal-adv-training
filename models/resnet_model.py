@@ -229,7 +229,7 @@ class ResNet(object):
 
     def _fully_connected(self, x, out_dim):
         """FullyConnected layer for final output."""
-        x = tf.layers.flatten(x)
+        x = tf2.keras.layers.Flatten()(x)
         w = tf.get_variable(
             'DW', [x.get_shape()[1], out_dim],
             initializer=tf.uniform_unit_scaling_initializer(factor=1.0))
