@@ -127,7 +127,7 @@ class ResNet(object):
     def _batch_norm(self, name, x):
         """Batch normalization."""
         with tf.variable_scope(name, reuse=False):
-            return tf.layers.batch_normalization(x, training=self.training, name="batch_norm")
+            return tf.contrib.layers.batch_norm(x, training=self.training, name="batch_norm")
 
     def _residual(self, x, in_filter, out_filter, stride,
                   activate_before_residual=False):
