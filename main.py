@@ -970,7 +970,11 @@ def main():
 
         if args.mode == 'eval':
             data_X, data_y, test_X, test_y = load_celebA4classifier()
-
+    elif args.dataset == 'cifar10':
+        num_classes = 10
+        args.num_classes = 10
+        args.image_size = 32
+        args.channels = 3
     else:
         raise NotImplementedError(
             "Dataset {} not supported!".format(args.dataset))
