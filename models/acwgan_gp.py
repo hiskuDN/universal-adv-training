@@ -142,7 +142,7 @@ class ACWGAN_GP(object):
             self.len_discrete_code = 10  # categorical distribution (i.e. label)
             self.len_continuous_code = 2  # gaussian distribution (e.g. rotation, thickness)
 
-            # load mnist
+            # load cifar10
             self.data_X, self.data_y = load_cifar10(self.dataset_name)
 
             # get number of batches for a single epoch

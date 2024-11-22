@@ -542,8 +542,8 @@ def defense_by_attack(hps, lambda1=100, lambda2=20, noise=False, test_num=0):
         dim_D = 64
         dim_G = 64
     elif args.dataset == 'cifar10':
-        dim_D = 32
-        dim_G = 32
+        dim_D = 64
+        dim_G = 64
 
     acgan = ACWGAN_GP(
         sess,
